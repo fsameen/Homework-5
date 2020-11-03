@@ -1,0 +1,134 @@
+---
+title: "Homework 5"
+author: "Fareha Sameen"
+date: "10/26/2020"
+output: html_document
+
+group: Neshma and Hertz
+---
+
+```{r}
+dat_use <- subset(acs2017_ny,use_varb)
+use_varb <- (AGE >= 25) & (AGE <= 55) & (LABFORCE == 2) & (WKSWORK2 > 4) & (UHRSWORK >= 35) & (CITIZEN == 1) & (female == 1) & ((educ_college == 1) | (educ_advdeg == 1))
+ 
+# I'm looking for women, who have at least one college degree and are citizens. 
+```
+
+```{r}
+dat_use <- subset(acs2017_ny,use_varb)
+model_1 <- lm(INCWAGE ~ AGE + I(AGE^2) + I(AGE^3) + I(AGE^4) + I(AGE^5) + I(AGE^6) )
+summary(model_1)
+
+require(stargazer)
+stargazer(model_1, type = "text")
+
+NNobs <- length(INCWAGE) 
+set.seed(12345) 
+graph_obs <- (runif(NNobs) < 0.1) 
+dat_graph <-subset(dat_use,graph_obs)
+
+plot(INCWAGE ~ jitter(AGE, factor = 2), pch = 16, col = rgb(0.5, 0.5, 0.5, alpha = 0.2), ylim = c(0,150000), data = dat_graph)
+to_be_predicted0 <- data.frame(AGE = 20:65, female = 1, educ_college = 1, educ_advdeg = 1)
+to_be_predicted0$yhat <- predict(model_1, newdata = to_be_predicted0)
+lines(yhat ~ AGE, data = to_be_predicted0)
+
+#Through this I'm trying to look at higher polynomials for age up to 6 in order to see if the higher polynomials are significant, furthermore, this should also show whether there is a pattern of predicted wage as a function of age. 
+ 
+#The data shows that though the polynomials for age increase, The plot shows that there is no correlation between age and income. There is no linear regression, showing that wages increase for people until about 45 and then they stop increasing and the curve starts going downward indicating that after about 50 years of age, the wages decrease. 
+```
+
+```{r}
+dat_use <- subset(acs2017_ny, use_varb)
+model_2 <- lm(INCWAGE ~ I(AGE^2) + female + CITIZEN)
+summary(model_2)  
+
+require(stargazer)
+stargazer(model_2, type = "text")
+
+NNobs <- length(INCWAGE) 
+set.seed(12345) 
+graph_obs <- (runif(NNobs) < 0.1) 
+dat_graph <-subset(dat_use,graph_obs)
+
+plot(INCWAGE ~ jitter(AGE, factor = 2), pch = 16, col = rgb(0.5, 0.5, 0.5, alpha = 0.2), ylim = c(0,150000), data = dat_graph)
+to_be_predicted1 <- data.frame(AGE = 20:65, female = 1, educ_college = 1, educ_advdeg = 1, CITIZEN = 1)
+to_be_predicted1$yhat <- predict(model_2, newdata = to_be_predicted1)
+lines(yhat ~ AGE, data = to_be_predicted1)
+
+# This data shows that there's a negative correlation between age and icnome, however, in this we're looking at women with at least one degree who are citizens. This also has the polynomial for age. The result shows that as age increases, the wage degreases. 
+
+```
+
+```{r}
+dat_use <- subset(acs2017_ny, use_varb)
+model_3 <- lm(INCWAGE ~ I(AGE^3) + female + CITIZEN)
+summary(model_3)   
+
+require(stargazer)
+stargazer(model_3, type = "text")
+
+NNobs <- length(INCWAGE) 
+set.seed(12345) 
+graph_obs <- (runif(NNobs) < 0.1) 
+dat_graph <-subset(dat_use,graph_obs)
+
+plot(INCWAGE ~ jitter(AGE, factor = 2), pch = 16, col = rgb(0.5, 0.5, 0.5, alpha = 0.2), ylim = c(0,150000), data = dat_graph)
+to_be_predicted2 <- data.frame(AGE = 20:65, female = 1, educ_college = 1, educ_advdeg = 1, CITIZEN = 1)
+to_be_predicted2$yhat <- predict(model_3, newdata = to_be_predicted2)
+lines(yhat ~ AGE, data = to_be_predicted2)
+
+```
+```{r}
+dat_use <- subset(acs2017_ny, use_varb)
+model_4 <- lm(INCWAGE ~ I(AGE^4) + female + CITIZEN)
+summary(model_4) 
+
+require(stargazer)
+stargazer(model_4, type = "text")
+
+NNobs <- length(INCWAGE) 
+set.seed(12345) 
+graph_obs <- (runif(NNobs) < 0.1) 
+dat_graph <-subset(dat_use,graph_obs)
+
+plot(INCWAGE ~ jitter(AGE, factor = 2), pch = 16, col = rgb(0.5, 0.5, 0.5, alpha = 0.2), ylim = c(0,150000), data = dat_graph)
+to_be_predicted3 <- data.frame(AGE = 20:65, female = 1, educ_college = 1, educ_advdeg = 1, CITIZEN = 1)
+to_be_predicted3$yhat <- predict(model_4, newdata = to_be_predicted3)
+lines(yhat ~ AGE, data = to_be_predicted3)
+```
+```{r}
+dat_use <- subset(acs2017_ny, use_varb)
+model_5 <- lm(INCWAGE ~ I(AGE^5) + female + CITIZEN)
+summary(model_5)  
+
+require(stargazer)
+stargazer(model_5, type = "text")
+
+NNobs <- length(INCWAGE) 
+set.seed(12345) 
+graph_obs <- (runif(NNobs) < 0.1) 
+dat_graph <-subset(dat_use,graph_obs)
+
+plot(INCWAGE ~ jitter(AGE, factor = 2), pch = 16, col = rgb(0.5, 0.5, 0.5, alpha = 0.2), ylim = c(0,150000), data = dat_graph)
+to_be_predicted4 <- data.frame(AGE = 20:65, female = 1, educ_college = 1, educ_advdeg = 1, CITIZEN = 1)
+to_be_predicted4$yhat <- predict(model_5, newdata = to_be_predicted4)
+lines(yhat ~ AGE, data = to_be_predicted4)
+```
+```{r}
+dat_use <- subset(acs2017_ny, use_varb)
+model_6 <- lm(INCWAGE ~ I(AGE^6) + female + CITIZEN)
+summary(model_6)   
+
+require(stargazer)
+stargazer(model_6, type = "text")
+
+NNobs <- length(INCWAGE) 
+set.seed(12345) 
+graph_obs <- (runif(NNobs) < 0.1) 
+dat_graph <-subset(dat_use,graph_obs)
+
+plot(INCWAGE ~ jitter(AGE, factor = 2), pch = 16, col = rgb(0.5, 0.5, 0.5, alpha = 0.2), ylim = c(0,150000), data = dat_graph)
+to_be_predicted5 <- data.frame(AGE = 20:65, female = 1, educ_college = 1, educ_advdeg = 1, CITIZEN = 1)
+to_be_predicted5$yhat <- predict(model_6, newdata = to_be_predicted5)
+lines(yhat ~ AGE, data = to_be_predicted5)
+```
